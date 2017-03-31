@@ -33,22 +33,12 @@ for timestamp, buf in pcap:
             continue
 
         # get http referer
-        myhttp = request.headers
-        if 'referer' in myhttp:
-            mylist.append(myhttp['referer'])
+        if request.uri == '/':
+            myheaders = request.headers
+            if 'referer' in myheaders:
+                print 'host: %s\treferer: %s' % \
+                    (myheaders['host'], myheaders['referer'])
+            else:
+                print 'host: %s' % myheaders['host']
 
 f.close()
-
-tempitem = mylist[0]
-mynewlist = [tempitem]
-# filter css and js request
-for index, item in enumerate(list(filter(lambda x : x[-3:]!='css' and x[-2:]!='js' , mylist))):
-    if index == 0:
-        continue
-    if item == tempitem:
-        continue
-    else:
-        mynewlist.append(item)
-        tempitem = item
-
-print mynewlist
